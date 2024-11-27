@@ -1,0 +1,28 @@
+html, body, #root {
+  width: 100%;
+  height: 100%;
+}
+
+.homepage {
+  background-image: url("./images/stickies.jpg");
+  /* background-size: cover; */
+  height: 100%;
+  width: 100%;
+} 
+
+.homepage-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  width: 50%;
+
+  .bold {
+    font-size: 60px;
+    font-weight: 800;
+    font-family: "Montserrat", sans-serif;
+    text-align: center;
+  }
+
+}

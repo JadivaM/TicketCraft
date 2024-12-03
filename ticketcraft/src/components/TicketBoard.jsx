@@ -24,8 +24,6 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 function TicketBoard({ formValues, onSubmit }) {
-    console.log('formValues', formValues);
-    // console.log('formValues.formSkipped', formValues.formSkipped);
     const [open, setOpen] = useState(false);
     const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
     const [ticketsArray, setTicketsArray] = useState([]);

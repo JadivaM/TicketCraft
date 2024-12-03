@@ -11,7 +11,6 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 
 function Tickets({ formValues, onDeleteClick, ticket, onTicketChange }) {
-    console.log('ticket', ticket);
     // const { attributes, listeners, setNodeRef, transform } = useDraggable({
     //     id: 'draggable',
     // });

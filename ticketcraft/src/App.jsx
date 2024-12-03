@@ -1,6 +1,5 @@
 import Home from './components/Home';
 import Board from './pages/Board';
-// import TicketBoard from './components/TicketBoard';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {DndContext} from '@dnd-kit/core';
@@ -19,10 +18,6 @@ function App() {
           path="/board"
           element={<Board />}
         />
-        {/* <Route
-          path="/tickets"
-          element={<TicketBoard />}
-        /> */}
       </Routes>
     </BrowserRouter>
     </DndContext>

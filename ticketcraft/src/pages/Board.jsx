@@ -24,15 +24,12 @@ function Board() {
       });
 
     const handleSubmit = (values) => {
-        // e.preventDefault();
-        // console.log('parent values', values);
         setFormValues(values);
         setHasBoard(true);
     }
 
     return (
         <>
-        {/* <Navbar /> */}
         {hasBoard ? (<TicketBoard formValues={formValues} onSubmit={handleSubmit} />) : (<Form onSubmit={handleSubmit} />)}
         </>
     )

@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import React, { useState } from 'react';
 import Card from '@mui/material/Card';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import InputAdornment from '@mui/material/InputAdornment';
+import Select from '@mui/material/Select';
 
 
-function CreateForm({ onSubmit, onClose }) {
+function CreateForm({ onSubmit, onClose, teamMembersArr }) {
+  const [newMember, setNewMember] = useState('');
 
   const statuses = [
     {
@@ -39,21 +39,43 @@ function CreateForm({ onSubmit, onClose }) {
       ...prevValues,
       [name]: value,
     }));
+    console.log(name, value)
+  };
+
+  const handleNewMemberChange = (event) => {
+    setNewMember(event.target.value);
+  };
+
+  const handleAddNewMember = () => {
+    // Allow users to select from existing team members array or add
+    // Set the new member as the assignee
+    if (newMember && !teamMembersArr.includes(newMember)) {
+      setFormValues({
+        ...formValues,
+        teamMembers: [...teamMembersArr, newMember],
+        assignee: newMember, 
+      });
+      setNewMember(''); // Clear the new member input field
+    }
   };
 
   const handleFormSubmit = (event) => {
-    console.log('event', event);
     event.preventDefault();
-    onSubmit(formValues);
-    onClose();
+    if (!formValues.ticketName || !formValues.assignee || !formValues.status) {
+      alert("Please fill out all fields.");
+      return;
+    } else {
+      onSubmit(formValues);
+      onClose();
+    }
   };
 
   return (
     <>
-      <Card sx={{ width: 600, height: 500, display: 'flex', flexDirection: 'column', justifyContent: 'center', margin: 'auto', marginTop: '20px' }}>
+      <Card sx={{ width: 600, height: 600, display: 'flex', flexDirection: 'column', justifyContent: 'center', margin: 'auto', marginTop: '20px' }}>
         <h2 style={{ textAlign: 'center' }}>Create a new ticket</h2>
         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '50%', margin: 'auto' }}>
-          <p style={{ fontWeight: '600' }}>1. What should this ticket be named?</p>
+          <p style={{ fontWeight: '600' }}>1. What should this ticket be named? *</p>
           <TextField
             id="outlined-size-small"
             size="small"
@@ -62,16 +84,41 @@ function CreateForm({ onSubmit, onClose }) {
             name="ticketName"
             value={formValues.ticketName}
           />
-          <p style={{ fontWeight: '600' }}>2. Who should be assigned to this ticket?</p>
-          <TextField
-            id="outlined-size-small"
-            size="small"
-            sx={{ backgroundColor: '#e6f0fe' }}
-            onChange={handleInputChange}
-            name="assignee"
+          <p style={{ fontWeight: '600' }}>2. Who should be assigned to this ticket? *</p>
+          <Select
             value={formValues.assignee}
-          />
-          <p style={{ fontWeight: '600' }}>3. What is the status of this ticket?</p>
+            onChange={handleInputChange}
+            label="Assignee"
+            displayEmpty
+            name="assignee"
+          >
+            {/* Render existing team members */}
+            {teamMembersArr.map((member, index) => (
+              <MenuItem key={index} value={member}>
+                {member}
+              </MenuItem>
+            ))}
+            {/* Option to add a new team member */}
+            <MenuItem value="addNew">+ Add New Member</MenuItem>
+          </Select>
+          {/* Show input field to add a new member if "Add New Member" is selected */}
+          {formValues.assignee === 'addNew' && (
+            <>
+              <TextField
+                id="outlined-size-small"
+                size="small"
+                label="New Assignee"
+                sx={{ backgroundColor: '#e6f0fe', marginTop: '20px', marginBottom: '20px' }}
+                onChange={handleNewMemberChange}
+                // name="ticketName"
+                value={newMember}
+              />
+              <Button onClick={handleAddNewMember} variant="outlined">
+                Add Member
+              </Button>
+            </>
+          )}
+          <p style={{ fontWeight: '600' }}>3. What is the status of this ticket? *</p>
           <TextField
             id="status-ticket"
             size="small"

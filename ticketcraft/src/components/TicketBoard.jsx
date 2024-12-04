@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar.jsx'
-// import { useDraggable } from '@dnd-kit/core';
-import { useDroppable } from '@dnd-kit/core';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -76,7 +74,6 @@ function TicketBoard({ formValues, onSubmit }) {
     }
 
     const handleDeleteClick = (ticket) => {
-        console.log('handleDeleteClick', ticket);
         setOpenDeleteConfirmation(true);
         setValueToRemove(ticket);
     };
@@ -88,7 +85,6 @@ function TicketBoard({ formValues, onSubmit }) {
     };
 
     const handleTicketChange = (updatedTicket) => {
-        console.log('updatedTicket', updatedTicket);
         setTicketsArray(prevTickets => {
             return prevTickets.map(ticket => {
                 // If the ticket's ticketName matches the updatedTicket's ticketName, update it
@@ -107,7 +103,6 @@ function TicketBoard({ formValues, onSubmit }) {
 
     useEffect(() => {
         if (formValues.createTicketForm) {
-            console.log('ticketsArray', ticketsArray);
             setTicketsArray(prevTickets => {
                 // Only add formValues if it doesn't exists
                 if (!prevTickets.some(ticket => ticket.ticketName === formValues.ticketName)) {
@@ -116,7 +111,6 @@ function TicketBoard({ formValues, onSubmit }) {
                 return prevTickets; // No change if the item already exists
             });
         }
-        console.log('TicketsArray', ticketsArray);
     }, [formValues]);
 
     useEffect(() => {
@@ -134,13 +128,13 @@ function TicketBoard({ formValues, onSubmit }) {
             <Navbar />
             <Box sx={{ width: '100%', margin: 'auto' }}>
                 <Dialog onClose={handleClose} open={open}>
-                    <CreateForm onSubmit={onSubmit} onClose={handleClose} />
+                    <CreateForm onSubmit={onSubmit} onClose={handleClose} teamMembersArr={formValues.teamMembers} />
                 </Dialog>
                 <Dialog onClose={handleDeleteClickClose} open={openDeleteConfirmation}>
                     <Box sx={{ padding: '30px' }}>
                         <p>Are you sure you want to delete this ticket?</p>
                     </Box>
-                    <Box sx={{ padding: '10px', width: '100%', margin: 'auto', display: 'flex', justifyContent: 'center', justifyContent: 'space-evenly' }}>
+                    <Box sx={{ padding: '10px', width: '100%', margin: 'auto', display: 'flex', justifyContent: 'space-evenly' }}>
                         <Button onClick={handleDeleteTicket} variant="outlined">Yes</Button>
                         <Button onClick={handleDeleteClickClose} variant="contained">No</Button>
                     </Box>

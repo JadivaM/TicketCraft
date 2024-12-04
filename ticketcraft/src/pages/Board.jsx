@@ -1,11 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState } from 'react';
 import Form from '../components/Form';
 import TicketBoard from '../components/TicketBoard';
-import Navbar from '../components/Navbar'
 
 
 function Board() {
-    const [isLoading, setIsLoading] = useState(false);
+    // const [isLoading, setIsLoading] = useState(false);
     const [hasBoard, setHasBoard] = useState(false);
 
     const [formValues, setFormValues] = useState({

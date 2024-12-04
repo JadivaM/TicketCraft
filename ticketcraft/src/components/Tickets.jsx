@@ -1,23 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useDraggable } from '@dnd-kit/core';
+import React, { useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import CardActions from '@mui/material/CardActions';
-import Button from '@mui/material/Button';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import InputAdornment from '@mui/material/InputAdornment';
 
 function Tickets({ formValues, onDeleteClick, ticket, onTicketChange }) {
-    // const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    //     id: 'draggable',
-    // });
 
-    // const style = transform ? {
-    //     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-    // } : undefined;
 
 
     const statuses = [
@@ -36,10 +26,7 @@ function Tickets({ formValues, onDeleteClick, ticket, onTicketChange }) {
     ];
 
     const handleInputChange = (event) => {
-        console.log('handleInputChange');
         const { name, value } = event.target;
-        console.log('name', name);
-        console.log('value', value);
         ticket[name] = value;
         onTicketChange(ticket);
     };
@@ -47,12 +34,10 @@ function Tickets({ formValues, onDeleteClick, ticket, onTicketChange }) {
 
     const handleDeleteButtonClicked = (event) => {
         event.preventDefault();
-        console.log('handleDeleteButtonClicked');
         onDeleteClick(ticket);
     }
 
     useEffect(() => {
-        // setTicketsArray(prevTickets => [...prevTickets, formValues]);
         console.log('ticket useEffect')
     }, [ticket]);
 
@@ -61,10 +46,6 @@ function Tickets({ formValues, onDeleteClick, ticket, onTicketChange }) {
             {ticket ? (
                 <>
                     <Paper
-                        // ref={setNodeRef}
-                        // style={style}
-                        // {...listeners}
-                        // {...attributes}
                         sx={{ backgroundColor: '#e6f0fe', height: '200px', margin: '10px' }}
                         elevation={3}>
                         <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
@@ -106,7 +87,7 @@ function Tickets({ formValues, onDeleteClick, ticket, onTicketChange }) {
                         </Box>
                         <h2 style={{ textAlign: 'center' }}>{ticket.ticketName}</h2>
                         <CardActions sx={{ display: 'flex', width: '90%', height: '85px', justifyContent: 'flex-end', marginLeft: 'auto' }}>
-                        <DeleteIcon onClick={handleDeleteButtonClicked} style={{ cursor: 'pointer' }} />
+                            <DeleteIcon onClick={handleDeleteButtonClicked} style={{ cursor: 'pointer' }} />
                         </CardActions>
                     </Paper>
                 </>

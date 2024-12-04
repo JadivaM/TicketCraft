@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -39,34 +39,38 @@ function Form({ onSubmit }) {
   });
 
   const handleInputChange = (event) => {
+    // set state
     const { name, value } = event.target;
-    if (name === 'teamMembers') {
-      // Split the input value by commas, trim extra spaces, and filter out empty names
-      const nameList = value.split(',').map((name) => name.trim()).filter((name) => name !== '');
-
-      // Update the teamMembers field in formValues
-      setFormValues((prevValues) => ({
-        ...prevValues,
-        [name]: nameList, // Update teamMembers as an array
-      }));
-    } else {
-      setFormValues((prevValues) => ({
-        ...prevValues,
-        [name]: value,
-      }));
-    }
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
   };
 
   const handleFormSkipped = (event) => {
     // if user chooses to skip the form submission. generate blank ticket board.
     event.preventDefault();
-    onSubmit({formSkipped: true});
+    onSubmit({ formSkipped: true });
   }
 
   const handleFormSubmit = (event) => {
     // handle form submission and generate tickets for user
     event.preventDefault();
-    onSubmit(formValues);
+    if (!formValues.typeOfProject || !formValues.teamMembers) {
+      alert("Please fill out all required fields.");
+      return;
+    } else {
+      // Split the input value by commas, trim extra spaces, and filter out empty names
+      const nameList = formValues.teamMembers.split(',')
+      .map((member) => member.trim())  // Trim spaces around each member
+      .filter((member) => member !== ''); // Remove empty strings
+
+      // submit
+      onSubmit({
+        ...formValues,
+        teamMembers: nameList,  // Pass the updated array to the parent
+      });
+    }
   };
 
   return (
@@ -81,8 +85,9 @@ function Form({ onSubmit }) {
             <p style={{ fontWeight: '600' }}>2. What is your end date?</p>
             <DatePicker sx={{ backgroundColor: '#e6f0fe' }} label="End date" />
           </LocalizationProvider>
-          <p style={{ fontWeight: '600' }}>3. What type of project are you building?</p>
+          <p style={{ fontWeight: '600' }}>3. What type of project are you building? *</p>
           <TextField
+            data-testid="select-dropdown"
             id="outlined-select"
             select
             sx={{ backgroundColor: '#e6f0fe' }}
@@ -126,7 +131,7 @@ function Form({ onSubmit }) {
             name="sprintTime"
             value={formValues.sprintTime}
           />
-          <p style={{ fontWeight: '600' }}>6. Enter your team members names separated by commas</p>
+          <p style={{ fontWeight: '600' }}>6. Enter your team members names separated by commas *</p>
           <TextField
             id="outlined-size-small"
             size="small"

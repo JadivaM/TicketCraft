@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Form from '../components/Form';
 
-describe('MyForm Component', () => {
+describe('Render initial form Component', () => {
     it('renders the form with initial values', () => {
         render(<Form onSubmit={jest.fn()} />);
 

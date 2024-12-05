@@ -17,7 +17,6 @@ const Item = styled(Paper)(({ theme }) => ({
     height: '100vh',
     borderRight: '#c4c4c4 1px solid',
     borderRadius: 0,
-    // backgroundColor: '#efefef'
 }));
 
 
@@ -27,39 +26,6 @@ function TicketBoard({ formValues, onSubmit }) {
     const [ticketsArray, setTicketsArray] = useState([]);
     const [valueToRemove, setValueToRemove] = useState('');
     const columns = ['To do 📌', 'In progress 🚧', 'Done ✅'];
-
-    // if user submitted form
-    // if (!formValues.formSkipped && !formValues.createTicketForm) {
-    //     ticketsArray.push({ status: 'To do', ticketName: 'Create wireframe', assignee: '' }, { status: 'To do', ticketName: 'Create prototype', assignee: '' }, { status: 'To do', ticketName: 'Implement code', assignee: '' }, { status: 'To do', ticketName: 'Test/QA', assignee: '' }, { status: 'To do', ticketName: 'Deployment', assignee: '' });
-    // }
-    // else if (formValues.createTicketForm) {
-    //     console.log('ticketsArray', ticketsArray);
-    //     setTicketsArray(prevTickets => {
-    //         // Only add formValues if it doesn't exists
-    //         if (!prevTickets.some(ticket => ticket.ticketName === formValues.ticketName)) {
-    //           return [...prevTickets, formValues];
-    //         }
-    //         return prevTickets; // No change if the item already exists
-    //       });
-
-    //     // setTicketsArray(prevState => ([...prevState, formValues]));
-    //     console.log('ticketsArray2', ticketsArray);
-    // }
-
-    // const {isOver, setNodeRef} = useDroppable({
-    //     id: "droppable",
-    //   });
-    //   const style = {
-    //     opacity: isOver ? 1 : 0.5,
-    //   };
-
-    // const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    //     id: 'draggable',
-    // });
-
-    // const style = transform ? {
-    //     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-    // } : undefined;
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -127,7 +93,7 @@ function TicketBoard({ formValues, onSubmit }) {
         <>
             <Navbar />
             <Box sx={{ width: '100%', margin: 'auto' }}>
-                <Dialog onClose={handleClose} open={open}>
+                <Dialog aria-label="Create ticket" onClose={handleClose} open={open}>
                     <CreateForm onSubmit={onSubmit} onClose={handleClose} teamMembersArr={formValues.teamMembers} />
                 </Dialog>
                 <Dialog onClose={handleDeleteClickClose} open={openDeleteConfirmation}>
@@ -152,11 +118,7 @@ function TicketBoard({ formValues, onSubmit }) {
                                         {/* map through statuses and conditionally render ticket component on column based on status? */}
                                         <h2 style={{ textAlign: 'center' }}>{column}</h2>
                                         <Box
-                                            // id="droppable"
-                                            // ref={setNodeRef} style={style}
-                                            // id="category-a"
                                             sx={{ fontSize: '12px', textTransform: 'uppercase' }}
-                                        // ref={setNodeRef} style={style} {...listeners} {...attributes}
                                         >
                                             {ticketsArray.length > 0 ?
                                                 (
@@ -168,9 +130,6 @@ function TicketBoard({ formValues, onSubmit }) {
                                                                     onDeleteClick={handleDeleteClick}
                                                                     formValues={formValues}
                                                                     ticket={ticket}
-                                                                    // id={ticket.ticketName}
-                                                                    // id="droppable"
-                                                                    // id="draggable"
                                                                     onTicketChange={handleTicketChange}
                                                                 />)
                                                         )

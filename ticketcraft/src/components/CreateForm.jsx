@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -9,6 +9,7 @@ import Select from '@mui/material/Select';
 
 function CreateForm({ onSubmit, onClose, teamMembersArr }) {
   const [newMember, setNewMember] = useState('');
+  const [localTeamMembers, setLocalTeamMembers] = useState(teamMembersArr);
 
   const statuses = [
     {
@@ -39,7 +40,6 @@ function CreateForm({ onSubmit, onClose, teamMembersArr }) {
       ...prevValues,
       [name]: value,
     }));
-    console.log(name, value)
   };
 
   const handleNewMemberChange = (event) => {
@@ -47,14 +47,17 @@ function CreateForm({ onSubmit, onClose, teamMembersArr }) {
   };
 
   const handleAddNewMember = () => {
-    // Allow users to select from existing team members array or add
-    // Set the new member as the assignee
-    if (newMember && !teamMembersArr.includes(newMember)) {
+    // allow users to select from existing team members array or add
+    // set the new member as the assignee
+    const checkLocalTeamMembers = localTeamMembers || [];
+
+    if (newMember && !checkLocalTeamMembers.includes(newMember)) {
       setFormValues({
         ...formValues,
-        teamMembers: [...teamMembersArr, newMember],
-        assignee: newMember, 
+        teamMembers: [...checkLocalTeamMembers, newMember],
+        assignee: newMember,
       });
+      onSubmit({ teamMembers: [...checkLocalTeamMembers, newMember] });
       setNewMember(''); // Clear the new member input field
     }
   };
@@ -69,6 +72,11 @@ function CreateForm({ onSubmit, onClose, teamMembersArr }) {
       onClose();
     }
   };
+
+  // Sync local team members state with the prop when it changes
+  useEffect(() => {
+    setLocalTeamMembers(teamMembersArr);
+  }, [teamMembersArr]);
 
   return (
     <>
@@ -85,23 +93,34 @@ function CreateForm({ onSubmit, onClose, teamMembersArr }) {
             value={formValues.ticketName}
           />
           <p style={{ fontWeight: '600' }}>2. Who should be assigned to this ticket? *</p>
-          <Select
-            value={formValues.assignee}
-            onChange={handleInputChange}
-            label="Assignee"
-            displayEmpty
-            name="assignee"
-          >
-            {/* Render existing team members */}
-            {teamMembersArr.map((member, index) => (
-              <MenuItem key={index} value={member}>
-                {member}
-              </MenuItem>
-            ))}
-            {/* Option to add a new team member */}
-            <MenuItem value="addNew">+ Add New Member</MenuItem>
-          </Select>
-          {/* Show input field to add a new member if "Add New Member" is selected */}
+          {/* Render existing team members or add new */}
+          {localTeamMembers && localTeamMembers.length > 0 ? (
+            <Select
+              value={formValues.assignee}
+              onChange={handleInputChange}
+              label="Assignee"
+              displayEmpty
+              name="assignee"
+            >
+              {localTeamMembers.map((member, index) => (
+                <MenuItem key={index} value={member}>
+                  {member}
+                </MenuItem>
+              ))}
+              <MenuItem value="addNew">+ Add New Member</MenuItem>
+            </Select>
+          ) : (
+            <Select
+              value={formValues.assignee}
+              onChange={handleInputChange}
+              label="Assignee"
+              displayEmpty
+              name="assignee"
+            >
+              <MenuItem value="addNew">+ Add New Member</MenuItem>
+            </Select>
+          )}
+          {/* if "Add New Member" is selected */}
           {formValues.assignee === 'addNew' && (
             <>
               <TextField
